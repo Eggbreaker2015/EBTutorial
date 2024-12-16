@@ -242,11 +242,8 @@ public class UIManager : MonoBehaviour
 
     public T OpenUI<T>(object parameters = null) where T : UIBase
     {
-        var task = OpenUIAsync<T>(parameters);
-        task.Wait(); // 同步等待异步操作完成
-        var ui = task.Result;
-        OnUIOpen?.Invoke(ui);
-        return ui;
+        // TODO 同步打开UI 
+        return null; 
     }
 }
 

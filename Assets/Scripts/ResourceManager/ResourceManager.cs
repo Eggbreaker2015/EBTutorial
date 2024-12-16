@@ -53,4 +53,14 @@ public class ResourceManager : MonoBehaviour
     {
         ReleaseAllAssets();
     }
+    
+    public async Task<T> LoadAssetAsyncTest<T>(string address) where T : Object
+    {
+        var request = Resources.LoadAsync<T>(address);
+        while (!request.isDone)
+        {
+            await Task.Yield();
+        }
+        return request.asset as T;
+    }
 } 

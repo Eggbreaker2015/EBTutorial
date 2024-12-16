@@ -16,10 +16,16 @@ public class GameController : MonoBehaviour
         // 打开开始菜单
         UIManager.Instance.OnUIOpen += OnUIOpen;
         UIManager.Instance.OnUIClose += OnUIClose;
-        UIManager.Instance.OpenUI<GameStartMenu>();
-
+        UIManager.Instance.OpenUIAsync<GameStartMenu>();
+        
         //StartCombat();
+        //TestLoadAsset();
+    }
 
+    private async void TestLoadAsset()
+    {
+        var asset = await ResourceManager.Instance.LoadAssetAsyncTest<GameObject>("GameStartMenu");
+        Debug.Log(asset);
     }
 
     private void OnUIOpen(UIBase @base)

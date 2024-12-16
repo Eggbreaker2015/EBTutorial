@@ -12,4 +12,16 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 314577eb77ca0c94db166ef9a2933457, type: 3}
   m_Name: UIConfig
   m_EditorClassIdentifier: 
-  UIInfos: []
+  UIInfos:
+  - TypeName: GameStartMenu
+    PrefabPath: GameStartMenu
+    DefaultLayer: 0
+    SortingOrder: 0
+  - TypeName: TestMenu1View
+    PrefabPath: TestMenu1View
+    DefaultLayer: 0
+    SortingOrder: 0
+  - TypeName: TestMenu2View
+    PrefabPath: TestMenu2View
+    DefaultLayer: 0
+    SortingOrder: 0
