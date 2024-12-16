@@ -1,0 +1,46 @@
+%YAML 1.1
+%TAG !u! tag:unity3d.com,2011:
+--- !u!114 &11400000
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 0}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: f429b97d689fe7944b1f964cc049e82b, type: 3}
+  m_Name: TestTutorialData
+  m_EditorClassIdentifier: 
+  TutorialDatas:
+  - TutorialId: 0
+    IsForce: 1
+    Conditions:
+    - Key: 
+      Value: 0
+      Operator: 0
+    Steps:
+    - ViewName: GameStartMenu(Clone)
+      Step: 0
+      Desc: 
+      highLightPath: Button
+      ArrowTarget: Button
+      ArrowDir: -1
+      ArrowOffset: {x: 0, y: 0}
+      isClickBtn: 1
+    - ViewName: TestMenu1View(Clone)
+      Step: 1
+      Desc: 
+      highLightPath: Button
+      ArrowTarget: Button
+      ArrowDir: 0
+      ArrowOffset: {x: 0, y: 0}
+      isClickBtn: 1
+    - ViewName: TestMenu2View(Clone)
+      Step: 2
+      Desc: 
+      highLightPath: Button
+      ArrowTarget: Button
+      ArrowDir: 0
+      ArrowOffset: {x: 0, y: 0}
+      isClickBtn: 1
