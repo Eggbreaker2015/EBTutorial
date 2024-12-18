@@ -72,7 +72,7 @@ public class UIManager : MonoBehaviour
         return $"UI/{typeName}.prefab";
     }
 
-    public async Task<T> OpenUIAsync<T>(object parameters = null) where T : UIBase
+    private T OpenUIBase<T>(object parameters, bool isAsync) where T : UIBase
     {
         string uiPath = GetUIPath<T>();
 
@@ -83,7 +83,7 @@ public class UIManager : MonoBehaviour
             currentUI.gameObject.SetActive(false);
         }
 
-        // 加载新界面
+        // 检查缓存
         if (uiCache.TryGetValue(uiPath, out UIBase cachedUI))
         {
             var typedUI = cachedUI as T;
@@ -91,21 +91,15 @@ public class UIManager : MonoBehaviour
             {
                 typedUI.gameObject.SetActive(true);
                 typedUI.SetParameters(parameters);
-                await typedUI.OnOpenAsync();
                 return typedUI;
             }
         }
 
-        var prefab = await ResourceManager.Instance.LoadAssetAsync<GameObject>(uiPath);
-        if (prefab == null) return null;
+        return null;
+    }
 
-        var uiObject = Instantiate(prefab); 
-        var ui = uiObject.GetComponent<T>();
-        if (ui == null)
-        {
-            Debug.LogError($"UI component not found on prefab: {uiPath}");
-            return null;
-        }
+    private void SetupUI<T>(T ui, string uiPath) where T : UIBase
+    {
         if (ui.UILayer == UILayer.Default)
             ui.UILayer = GetDefaultLayer(ui.UIType);
         ui.transform.SetParent(GetLayerTransform(ui.UILayer), false);
@@ -122,10 +116,63 @@ public class UIManager : MonoBehaviour
         {
             uiStack.Push(ui);
         }
-       
-        
+    }
+
+    public T OpenUI<T>(object parameters = null) where T : UIBase
+    {
+        var ui = OpenUIBase<T>(parameters, false);
+        if (ui != null)
+        {
+            //ui.OnOpen();
+            OnUIOpen?.Invoke(ui);
+            return ui;
+        }
+
+        string uiPath = GetUIPath<T>();
+        var prefab = ResourceManager.Instance.LoadAsset<GameObject>(uiPath);
+        if (prefab == null) return null;
+
+        var uiObject = Instantiate(prefab);
+        ui = uiObject.GetComponent<T>();
+        if (ui == null)
+        {
+            Debug.LogError($"UI component not found on prefab: {uiPath}");
+            return null;
+        }
+
+        SetupUI(ui, uiPath);
+        ui.SetParameters(parameters);
+        //ui.OnOpen();
+        OnUIOpen?.Invoke(ui);
+        return ui;
+    }
+
+    public async Task<T> OpenUIAsync<T>(object parameters = null) where T : UIBase
+    {
+        var ui = OpenUIBase<T>(parameters, true);
+        if (ui != null)
+        {
+            await ui.OnOpenAsync();
+            OnUIOpen?.Invoke(ui);
+            return ui;
+        }
+
+        string uiPath = GetUIPath<T>();
+        var prefab = await ResourceManager.Instance.LoadAssetAsync<GameObject>(uiPath);
+        if (prefab == null) return null;
+
+        var uiObject = Instantiate(prefab);
+        ui = uiObject.GetComponent<T>();
+        if (ui == null)
+        {
+            Debug.LogError($"UI component not found on prefab: {uiPath}");
+            return null;
+        }
+
+        SetupUI(ui, uiPath);
         ui.SetParameters(parameters);
         await ui.OnOpenAsync();
+        OnUIOpen?.Invoke(ui);
         return ui;
     }
 
@@ -238,12 +285,6 @@ public class UIManager : MonoBehaviour
                 uiCache.Remove(oldestUI);
             }
         }
-    }
-
-    public T OpenUI<T>(object parameters = null) where T : UIBase
-    {
-        // TODO 同步打开UI 
-        return null; 
     }
 }
 

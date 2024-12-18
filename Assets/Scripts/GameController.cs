@@ -8,7 +8,7 @@ public class GameController : MonoBehaviour
     public TutorialSO tutorialSO;
     public TutorialCanvas tutorialCanvas;
     // Start is called before the first frame update
-    void Start()
+    async void Start()
     {
 
         var tutorialService = new TutorialService();
@@ -16,16 +16,10 @@ public class GameController : MonoBehaviour
         // 打开开始菜单
         UIManager.Instance.OnUIOpen += OnUIOpen;
         UIManager.Instance.OnUIClose += OnUIClose;
-        UIManager.Instance.OpenUIAsync<GameStartMenu>();
+        await UIManager.Instance.OpenUIAsync<GameStartMenu>();
         
         //StartCombat();
         //TestLoadAsset();
-    }
-
-    private async void TestLoadAsset()
-    {
-        var asset = await ResourceManager.Instance.LoadAssetAsyncTest<GameObject>("GameStartMenu");
-        Debug.Log(asset);
     }
 
     private void OnUIOpen(UIBase @base)
